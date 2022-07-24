@@ -1,5 +1,6 @@
-package com.example.cofnig;
+package com.example.techworld.cofnig;
 
+import org.hibernate.validator.spi.nodenameprovider.Property;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -13,10 +14,6 @@ public class MailConfig {
 
     @Bean
     public JavaMailSender javaMailSender(
-//            @Value("localhost") String mailHost,
-//            @Value("1025") Integer mailPort,
-//            @Value("techworld@techworld.com") String userName,
-//            @Value("") String password
             @Value("${mail.host}") String mailHost,
             @Value("${mail.port}") Integer mailPort,
             @Value("${mail.username}") String userName,

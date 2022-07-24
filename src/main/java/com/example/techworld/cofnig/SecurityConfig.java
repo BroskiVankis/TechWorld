@@ -1,4 +1,4 @@
-package com.example.cofnig;
+package com.example.techworld.cofnig;
 
 import com.example.techworld.repository.UserRepository;
 import com.example.techworld.service.TechUserDetailsService;
