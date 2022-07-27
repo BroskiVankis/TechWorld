@@ -1,6 +1,6 @@
 package com.example.techworld.model.dto.offer;
 
-import com.example.techworld.model.enums.ConditionEnum;
+import com.example.techworld.model.enums.StateEnum;
 import com.example.techworld.model.enums.StatusEnum;
 
 import javax.validation.constraints.Min;
@@ -15,7 +15,7 @@ public class AddOfferDTO {
     private Long modelId;
 
     @NotNull
-    private ConditionEnum condition;
+    private StateEnum state;
 
     @Positive
     @NotNull
@@ -47,12 +47,12 @@ public class AddOfferDTO {
         return this;
     }
 
-    public ConditionEnum getCondition() {
-        return condition;
+    public StateEnum getState() {
+        return state;
     }
 
-    public AddOfferDTO setCondition(ConditionEnum condition) {
-        this.condition = condition;
+    public AddOfferDTO setState(StateEnum state) {
+        this.state = state;
         return this;
     }
 

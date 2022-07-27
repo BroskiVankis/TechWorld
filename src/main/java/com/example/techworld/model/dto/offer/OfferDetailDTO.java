@@ -1,6 +1,6 @@
 package com.example.techworld.model.dto.offer;
 
-import com.example.techworld.model.enums.ConditionEnum;
+import com.example.techworld.model.enums.StateEnum;
 import com.example.techworld.model.enums.StatusEnum;
 
 import java.math.BigDecimal;
@@ -22,7 +22,7 @@ public class OfferDetailDTO {
 
     private BigDecimal price;
 
-    private ConditionEnum condition;
+    private StateEnum state;
 
     private StatusEnum status;
 
@@ -92,12 +92,12 @@ public class OfferDetailDTO {
         return this;
     }
 
-    public ConditionEnum getCondition() {
-        return condition;
+    public StateEnum getState() {
+        return state;
     }
 
-    public OfferDetailDTO setCondition(ConditionEnum condition) {
-        this.condition = condition;
+    public OfferDetailDTO setState(StateEnum state) {
+        this.state = state;
         return this;
     }
 
@@ -108,5 +108,9 @@ public class OfferDetailDTO {
     public OfferDetailDTO setStatus(StatusEnum status) {
         this.status = status;
         return this;
+    }
+
+    public String getOfferHighlight() {
+        return this.year + " " + this.brand + " " + this.model;
     }
 }

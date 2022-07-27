@@ -1,6 +1,6 @@
 package com.example.techworld.model.entity;
 
-import com.example.techworld.model.enums.ConditionEnum;
+import com.example.techworld.model.enums.StateEnum;
 import com.example.techworld.model.enums.StatusEnum;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Type;
@@ -21,7 +21,7 @@ public class OfferEntity {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private ConditionEnum condition;
+    private StateEnum state;
 
     private String imageUrl;
 
@@ -45,6 +45,7 @@ public class OfferEntity {
     @ManyToOne
     private UserEntity seller;
 
+
     public UUID getId() {
         return id;
     }
@@ -54,12 +55,12 @@ public class OfferEntity {
         return this;
     }
 
-    public ConditionEnum getCondition() {
-        return condition;
+    public StateEnum getState() {
+        return state;
     }
 
-    public OfferEntity setCondition(ConditionEnum condition) {
-        this.condition = condition;
+    public OfferEntity setState(StateEnum state) {
+        this.state = state;
         return this;
     }
 
@@ -139,7 +140,7 @@ public class OfferEntity {
     public String toString() {
         return "OfferEntity{" +
                 "id=" + id +
-                ", condition=" + condition +
+                ", state=" + state +
                 ", imageUrl='" + imageUrl + '\'' +
                 ", yearsUsed=" + yearsUsed +
                 ", price=" + price +

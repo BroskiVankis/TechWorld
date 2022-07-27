@@ -1,5 +1,5 @@
 package com.example.techworld.model.enums;
 
-public enum ConditionEnum {
+public enum StateEnum {
     NEW, USED
 }

@@ -1,6 +1,5 @@
 package com.example.techworld.repository;
 
-import com.example.techworld.model.dto.offer.OfferDetailDTO;
 import com.example.techworld.model.entity.OfferEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
