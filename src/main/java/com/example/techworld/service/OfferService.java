@@ -1,13 +1,16 @@
 package com.example.techworld.service;
 
-import com.example.techworld.model.dto.offer.AddOfferDTO;
+import com.example.techworld.model.dto.offer.CreateOrUpdateOfferDTO;
 import com.example.techworld.model.dto.offer.OfferDetailDTO;
+import com.example.techworld.model.dto.offer.SearchOfferDTO;
 import com.example.techworld.model.entity.ModelEntity;
 import com.example.techworld.model.entity.OfferEntity;
 import com.example.techworld.model.entity.UserEntity;
+import com.example.techworld.model.enums.UserRoleEnum;
 import com.example.techworld.model.mapper.OfferMapper;
 import com.example.techworld.repository.ModelRepository;
 import com.example.techworld.repository.OfferRepository;
+import com.example.techworld.repository.OfferSpecification;
 import com.example.techworld.repository.UserRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -15,6 +18,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class OfferService {
@@ -34,12 +39,38 @@ public class OfferService {
         this.offerMapper = offerMapper;
     }
 
-    public Page<OfferDetailDTO> getAllOffers(Pageable pageable) {
-        return offerRepository.findAll(pageable).map(offerMapper::offerEntityToCardListingOfferDto);
+    public boolean isOwner(String userName, UUID offerId) {
+        boolean isOwner = offerRepository.findById(offerId).filter(o -> o.getSeller().getEmail().equals(userName)).isPresent();
+
+        if (isOwner) {
+            return true;
+        }
+
+        return userRepository.findByEmail(userName).filter(this::isAdmin).isPresent();
     }
 
-    public void addOffer(AddOfferDTO addOfferDTO, UserDetails userDetails) {
-        OfferEntity newOffer = offerMapper.addOfferDtoToOfferEntity(addOfferDTO);
+    private boolean isAdmin(UserEntity user) {
+        return user.getUserRoles().stream().anyMatch(r -> r.getUserRole() == UserRoleEnum.ADMIN);
+    }
+
+    public void deleteOfferById(UUID offerId) {
+        offerRepository.deleteById(offerId);
+    }
+
+    public Page<OfferDetailDTO> getAllOffers(Pageable pageable) {
+        return offerRepository.findAll(pageable).map(offerMapper::offerEntityToOfferDetailDto);
+    }
+
+    public Optional<CreateOrUpdateOfferDTO> getOfferEditDetails(UUID offerId) {
+        return offerRepository.findById(offerId).map(offerMapper::offerEntityToCreateOrUpdateOfferDtoTo);
+    }
+
+    public Optional<OfferDetailDTO> findOfferByUUID(UUID offerId) {
+        return offerRepository.findById(offerId).map(offerMapper::offerEntityToOfferDetailDto);
+    }
+
+    public void addOffer(CreateOrUpdateOfferDTO addOfferDTO, UserDetails userDetails) {
+        OfferEntity newOffer = offerMapper.createOrUpdateOfferDtoToOfferEntity(addOfferDTO);
 
         UserEntity seller = userRepository.findByEmail(userDetails.getUsername()).orElseThrow();
 
@@ -51,7 +82,7 @@ public class OfferService {
         offerRepository.save(newOffer);
     }
 
-    public List<OfferDetailDTO> findOfferByOfferName(String query) {
-        return this.offerRepository.findAllByModel_NameContains(query).stream().map(offer -> offerMapper.offerEntityToCardListingOfferDto(offer)).toList();
+    public List<OfferDetailDTO> searchOffer(SearchOfferDTO searchOfferDTO) {
+        return this.offerRepository.findAll(new OfferSpecification(searchOfferDTO)).stream().map(offer -> offerMapper.offerEntityToOfferDetailDto(offer)).toList();
     }
 }

@@ -20,7 +20,7 @@ public class UserRegistrationController {
 
     private final UserService userService;
 
-    private final LocaleResolver localeResolver;
+    private LocaleResolver localeResolver;
 
     public UserRegistrationController(UserService userService, LocaleResolver localeResolver) {
         this.userService = userService;

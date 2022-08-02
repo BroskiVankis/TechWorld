@@ -1,21 +1,21 @@
 package com.example.techworld.web;
 
-import com.example.techworld.model.dto.offer.AddOfferDTO;
+
+import com.example.techworld.model.dto.offer.CreateOrUpdateOfferDTO;
 import com.example.techworld.model.dto.offer.SearchOfferDTO;
 import com.example.techworld.model.user.TechUserDetails;
 import com.example.techworld.service.BrandService;
 import com.example.techworld.service.OfferService;
+import com.example.techworld.exception.ObjectNotFoundException;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
@@ -43,7 +43,7 @@ public class OfferController {
     @GetMapping("/offers/add")
     public String addOffer(Model model) {
         if(!model.containsAttribute("addOfferModel")) {
-            model.addAttribute("addOfferModel", new AddOfferDTO());
+            model.addAttribute("addOfferModel", new CreateOrUpdateOfferDTO());
         }
         model.addAttribute("brands", brandService.getAllBrands());
 
@@ -51,7 +51,7 @@ public class OfferController {
     }
 
     @PostMapping("/offers/add")
-    public String addOffer(@Valid AddOfferDTO addOfferModel, BindingResult bindingResult, RedirectAttributes redirectAttributes, @AuthenticationPrincipal TechUserDetails userDetails) {
+    public String addOffer(@Valid CreateOrUpdateOfferDTO addOfferModel, BindingResult bindingResult, RedirectAttributes redirectAttributes, @AuthenticationPrincipal TechUserDetails userDetails) {
 
         if(bindingResult.hasErrors()) {
             redirectAttributes.addFlashAttribute("addOfferModel", addOfferModel);
@@ -65,35 +65,54 @@ public class OfferController {
     }
 
     @GetMapping("/offers/search")
-    public String searchOffer() {
-        return "offer-search";
-    }
-
-    @PostMapping("offers/search")
-    public String searchQuery(@Valid SearchOfferDTO searchOfferDTO, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
+    public String searchQuery(@Valid SearchOfferDTO searchOfferDTO,BindingResult bindingResult, Model model) {
 
         if(bindingResult.hasErrors()) {
-            redirectAttributes.addFlashAttribute("searchOfferModel", searchOfferDTO);
-            redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.searchOfferModel", bindingResult);
-            return "redirect:/offers/search";
+            model.addAttribute("searchOfferModel", searchOfferDTO);
+            model.addAttribute("org.springframework.validation.BindingResult.searchOfferModel", bindingResult);
+            return "offer-search";
         }
 
-        return String.format("redirect:/offers/search/%s", searchOfferDTO.getQuery());
-    }
+        if(!model.containsAttribute("searchOfferModel")) {
+            model.addAttribute("searchOfferModel", searchOfferDTO);
+        }
 
-    @GetMapping("/offers/search/{query}")
-    public String searchResults(@PathVariable String query, Model model) {
-        model.addAttribute("offers", this.offerService.findOfferByOfferName(query));
+        if(!searchOfferDTO.isEmpty()) {
+            model.addAttribute("offers", offerService.searchOffer(searchOfferDTO));
+        }
+
         return "offer-search";
     }
 
-    @ModelAttribute(name = "searchOfferModel")
-    private SearchOfferDTO initSearchModel() {
-        return new SearchOfferDTO();
+    @GetMapping("offers/{id}/edit")
+    public String edit(@PathVariable ("id") UUID uuid, Model model) {
+
+       var offer = offerService.getOfferEditDetails(uuid).orElseThrow(() -> new ObjectNotFoundException("Offer with ID " + uuid + " not found"));
+
+        model.addAttribute("offer", offer);
+
+        return "details";
     }
 
-    @GetMapping("/offers/{id}/details")
-    public String getOfferDetail(@PathVariable("id") UUID id) {
+    @PreAuthorize("isOwner(#uuid)")
+    @DeleteMapping("/offers/{id}")
+    public String deleteOffer(
+            @PathVariable("id") UUID uuid) {
+        offerService.deleteOfferById(uuid);
+
+        return "redirect:/offers/all";
+    }
+
+    @GetMapping("/offers/{id}")
+    public String getOfferDetail(@PathVariable("id") UUID uuid,
+                                 Model model) {
+
+        var offerDto =
+                offerService.findOfferByUUID(uuid).
+                        orElseThrow(() -> new ObjectNotFoundException("Offer with UUID " + uuid + " not found!"));
+
+        model.addAttribute("offer", offerDto);
+
         return "details";
     }
 

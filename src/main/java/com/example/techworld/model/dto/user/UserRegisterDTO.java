@@ -12,7 +12,7 @@ public class UserRegisterDTO {
 
     @NotEmpty(message = "User email needs to be provided")
     @Email(message = "The provided email should be valid")
-    @UniqueUserEmail
+    @UniqueUserEmail(message = "User Email needs to be unique")
     private String email;
 
     @NotEmpty
@@ -28,15 +28,6 @@ public class UserRegisterDTO {
     private String password;
 
     private String confirmPassword;
-
-    public String getEmail() {
-        return email;
-    }
-
-    public UserRegisterDTO setEmail(String email) {
-        this.email = email;
-        return this;
-    }
 
     public String getFirstName() {
         return firstName;
@@ -71,6 +62,15 @@ public class UserRegisterDTO {
 
     public UserRegisterDTO setConfirmPassword(String confirmPassword) {
         this.confirmPassword = confirmPassword;
+        return this;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public UserRegisterDTO setEmail(String email) {
+        this.email = email;
         return this;
     }
 }
