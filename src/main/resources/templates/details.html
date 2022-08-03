@@ -15,7 +15,7 @@
 
 <div th:replace="fragments/navbar">Navbar</div>
 
-<div class="container-fluid">
+<div th:object="${offer}" class="container-fluid">
     <h2 class="text-center text-white mt-5">Details</h2>
     <div class="offers row mx-auto d-flex flex-row justify-content-center">
         <div class="offer card col-sm-2 col-md-3  col-lg-4 m-1 p-0" >
@@ -26,22 +26,28 @@
             </div>
             <ul class="offer-details list-group list-group-flush">
                 <li class="list-group-item">
-                    <div class="card-text"><span>• Years in use</span></div>
-                    <div class="card-text"><span>• Price</span></div>
-                    <div class="card-text"><span>• State type</span></div>
-                    <div class="card-text"><span>• Status type</span></div>
-                    <div class="card-text"><span>• Offer created</span></div>
-                    <div class="card-text"><span>• Offer modified</span></div>
-                    <div class="card-text"><span>• Seller - First and Last name</span></div>
+                    <div class="card-text">• Years in use <span th:text="*{yearsUsed}"></span></div>
+                    <div class="card-text">• Price <span th:text="*{price}"></span></div>
+                    <div class="card-text">• State type <span th:text="*{state}"></span></div>
+                    <div class="card-text">• Status type <span th:text="*{status}"></span></div>
+                    <div class="card-text">• Seller <span th:text="*{sellerFullName}"></span></div>
                 </li>
             </ul>
             <div class="card-body">
-                <a class="card-link" href="/">Update</a>
-                <a class="card-link" href="/">Delete</a>
+                <form
+                        th:action="@{/offers/{id}(id=*{id})}"
+                        th:method="delete"
+                        >
+                    <input type="submit" value="Delete">
+                </form>
             </div>
+
+            <a th:href="@{/offers/{id}/edit(id=*{id})}">
+                Edit offer
+            </a>
         </div>
         <div class="offer card col-sm-2 col-md-3  col-lg-4 m-1 p-0">
-            <img src="/" class="card-img-top"  alt="Tech image">
+            <img th:src="*{imageUrl}" class="card-img-top"  alt="Tech image">
         </div>
     </div>
 </div>

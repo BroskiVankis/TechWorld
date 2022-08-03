@@ -1,6 +1,7 @@
 package com.example.techworld.cofnig;
 
 import com.example.techworld.repository.UserRepository;
+import com.example.techworld.service.OAuthSuccessHandler;
 import com.example.techworld.service.TechUserDetailsService;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
@@ -21,12 +22,12 @@ public class SecurityConfig {
     }
 
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain filterChain(HttpSecurity http, OAuthSuccessHandler oAuthSuccessHandler) throws Exception {
 
         http.
                 authorizeRequests().
                 requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll().
-                antMatchers("/", "/users/login", "users/register").permitAll().
+                antMatchers("/", "/users/login", "/users/register").permitAll().
                 antMatchers("/offers/**").permitAll().
                 anyRequest().
                 authenticated().
@@ -42,7 +43,11 @@ public class SecurityConfig {
                 logoutUrl("/users/logout").
                 logoutSuccessUrl("/").
                 invalidateHttpSession(true).
-                deleteCookies("JSESSIONID");
+                deleteCookies("JSESSIONID").
+                and().
+                oauth2Login().
+                loginPage("/users/login").
+                successHandler(oAuthSuccessHandler);
 
         return http.build();
     }

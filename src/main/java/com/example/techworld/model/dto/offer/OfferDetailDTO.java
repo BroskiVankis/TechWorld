@@ -26,6 +26,32 @@ public class OfferDetailDTO {
 
     private StatusEnum status;
 
+    private String sellerFirstName;
+
+    private String sellerLastName;
+
+    public String getSellerFirstName() {
+        return sellerFirstName;
+    }
+
+    public OfferDetailDTO setSellerFirstName(String sellerFirstName) {
+        this.sellerFirstName = sellerFirstName;
+        return this;
+    }
+
+    public String getSellerFullName() {
+        return sellerFirstName + " " + sellerLastName;
+    }
+
+    public String getSellerLastName() {
+        return sellerLastName;
+    }
+
+    public OfferDetailDTO setSellerLastName(String sellerLastName) {
+        this.sellerLastName = sellerLastName;
+        return this;
+    }
+
     public OfferDetailDTO() {
     }
 
