@@ -103,7 +103,7 @@ public class OfferController {
         return "redirect:/offers/all";
     }
 
-    @GetMapping("/offers/{id}")
+    @GetMapping("/offers/{id}/details")
     public String getOfferDetail(@PathVariable("id") UUID uuid,
                                  Model model) {
 
