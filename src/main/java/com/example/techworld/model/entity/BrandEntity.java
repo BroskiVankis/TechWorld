@@ -15,6 +15,7 @@ public class BrandEntity extends BaseEntity{
     @OneToMany(mappedBy = "brand", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private List<ModelEntity> models = new ArrayList<>();
 
+
     public String getName() {
         return name;
     }
@@ -32,6 +33,7 @@ public class BrandEntity extends BaseEntity{
         this.models = models;
         return this;
     }
+
 
     @Override
     public String toString() {

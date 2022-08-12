@@ -11,6 +11,8 @@ public class BrandDTO {
 
     private List<ModelDTO> models;
 
+    private String imageUrl;
+
     public String getName() {
         return name;
     }
@@ -34,6 +36,15 @@ public class BrandDTO {
             this.models = new ArrayList<>();
         }
         this.models.add(model);
+        return this;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public BrandDTO setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
         return this;
     }
 }

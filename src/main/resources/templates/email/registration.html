@@ -1,5 +1,6 @@
 <!doctype html>
-<html lang="en" xmlns:th="http://www.w3.org/1999/html">
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport"
@@ -8,15 +9,15 @@
     <title>Document</title>
 </head>
 <body>
-    <h1 th:text="#{registration_welcome}">Welcome to TechWorld!</h1>
-    <th:block th:text="#{registration_dear_user(${userName})}">Dear Pesho!</th:block>
-    <p th:text="#{registration_happy}">
-        Hello and welcome the TechWorld.
-        Where you can get your hands on the newest and latest technology.
-        Anything you need we got it!
-        We appreciate you signing up for our website.
-        Enjoy your stay and make sure to check out what Tech we got in stock.
-    </p>
-    <th:block th:text="#{registration_best_regards}">Best regards, TechWorld team.</th:block>
+<h1 th:text="#{registration_welcome}">Welcome to TechWorld!</h1>
+<th:block th:text="#{registration_dear_user(${userName})}">Dear Pesho!</th:block>
+<p th:text="#{registration_happy}">
+    Hello and welcome the TechWorld.
+    Where you can get your hands on the newest and latest technology.
+    Anything you need we got it!
+    We appreciate you signing up for our website.
+    Enjoy your stay and make sure to check out what Tech we got in stock.
+</p>
+<th:block th:text="#{registration_best_regards}">Best regards, TechWorld team.</th:block>
 </body>
 </html>

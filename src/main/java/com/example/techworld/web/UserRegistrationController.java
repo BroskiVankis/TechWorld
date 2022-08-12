@@ -43,7 +43,7 @@ public class UserRegistrationController {
             redirectAttributes.addFlashAttribute("userModel", userModel);
             redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.userModel", bindingResult);
 
-            return "redirect:/users/register";
+            return "redirect:/register";
         }
 
         this.userService.registerAndLogin(userModel, localeResolver.resolveLocale(request));
